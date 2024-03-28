@@ -2,31 +2,32 @@ version: "2.4"
 
 services:
   otree:
-    build: https://github.com/UtrechtUniversity/FSW-OTree-container.git#main
-    image: "aglspruit_otree"
+    build: # https://github.com/UtrechtUniversity/FSW-OTree-container.git#main
+      context: ../FSW-OTree-container
     depends_on:
       database:
         condition: service_healthy
     ports:
-      - "8080:8080"
+      - "8000:8000"
     environment:
-      DATABASE_URL: postgres://otree:otree@database/otree
-      OTREE_ADMIN_PASSWORD: admin
-      OTREE_PRODUCTION: 1
-      OTREE_AUTH_LEVEL: STUDY
+      - DATABASE_URL=postgresql://otree:otree@database/otree
+      - OTREE_ADMIN_PASSWORD=admin
+      - OTREE_PRODUCTION=1
+      - OTREE_AUTH_LEVEL=STUDY
 
   database:
     # Official Postgres image from DockerHub (we use the latest version)
-    image: "postgres:latest"
+    image: "postgres:13"
+    hostname: "database"
 
     # By default, a Postgres database is running on the 5432 port.
     ports:
       - "5432:5432"
 
     environment:
-      POSTGRES_USER: otree # The PostgreSQL user (useful to connect to the database)
-      POSTGRES_PASSWORD: otree # The PostgreSQL password (useful to connect to the database)
-      POSTGRES_DB: otree # The PostgreSQL default database (automatically created at first launch)
+      - POSTGRES_USER=otree # The PostgreSQL user (useful to connect to the database)
+      - POSTGRES_PASSWORD=otree # The PostgreSQL password (useful to connect to the database)
+      - POSTGRES_DB=otree # The PostgreSQL default database (automatically created at first launch)
 
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
@@ -34,4 +35,3 @@ services:
     volumes:
       # Database volumes for the data as well as any initialization scripts
       - ./db-data/:/var/lib/postgresql/data/
-      - ./db-init:/docker-entrypoint-initdb.d/
