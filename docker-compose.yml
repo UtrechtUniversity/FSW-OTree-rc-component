@@ -2,8 +2,7 @@ version: "2.4"
 
 services:
   otree:
-    build: # https://github.com/UtrechtUniversity/FSW-OTree-container.git#main
-      context: ../FSW-OTree-container
+    build: https://github.com/UtrechtUniversity/FSW-OTree-container.git#main
     depends_on:
       database:
         condition: service_healthy
