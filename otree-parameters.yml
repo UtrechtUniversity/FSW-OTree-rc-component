@@ -1,0 +1,9 @@
+- name: Make workspace parameter available to Docker Compose
+  hosts: localhost
+  gather_facts: true
+  become: true
+  tasks:
+
+    - name: Create environment file using component parameter
+      shell:
+        cmd: echo EXPERIMENT_REPOSITORY="{{ experiment_repository }}" > /etc/otree.env
