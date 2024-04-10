@@ -7,4 +7,8 @@ nginx_conf="/etc/nginx/conf.d/ssl_main.conf"
 sed -i 's|root /var/www/html;|location \/ {\n    \tproxy_pass http:\/\/localhost:8000;\n    \tproxy_set_header Host $host;\n    \tproxy_set_header X-Real-IP $remote_addr;\n    }|' "$nginx_conf"
 sed -i 's|index index.html index.htm;||' "$nginx_conf"
 
+# Restart nginx to reload configuration
 systemctl restart nginx.service
+
+parameters=$PLUGIN_PARAMETERS
+echo $parameters
