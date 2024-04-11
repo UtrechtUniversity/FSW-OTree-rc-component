@@ -11,4 +11,4 @@ sed -i 's|index index.html index.htm;||' "$nginx_conf"
 systemctl restart nginx.service
 
 parameters=$PLUGIN_PARAMETERS
-echo $parameters | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > /var/parameters.txt
+echo $parameters > /var/parameters.txt
