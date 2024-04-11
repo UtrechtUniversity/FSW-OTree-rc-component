@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# This script runs just before the Docker project starts. It makes a couple
+# of changes in the system for the Compose project
+
 # Define the Nginx configuration file path
 nginx_conf="/etc/nginx/conf.d/ssl_main.conf"
 
@@ -10,5 +13,7 @@ sed -i 's|index index.html index.htm;||' "$nginx_conf"
 # Restart nginx to reload configuration
 systemctl restart nginx.service
 
+# Use the Research Cloud parameters to create an environment file to configure
+# our Docker containers
 parameters=$PLUGIN_PARAMETERS
-echo $parameters > /var/parameters.txt
+echo $parameters | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' > /var/parameters.txt
