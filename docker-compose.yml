@@ -14,7 +14,7 @@ services:
       # REPOSITORY
       # ACCESS_TOKEN
       # OTREE_ADMIN_PASSWORD
-      - /var/otree.env
+      - /etc/otree.env
     environment:
       - DATABASE_URL=postgresql://otree:otree@database/otree
       - OTREE_PRODUCTION=1
