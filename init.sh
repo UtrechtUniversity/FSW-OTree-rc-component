@@ -9,7 +9,7 @@ sed -i 's|index index.html index.htm;||' "$nginx_conf"
 
 # Restart nginx to reload configuration
 systemctl restart nginx.service
-
+echo $PLUGIN_PARAMETERS > /etc/parameters.txt
 echo $PLUGIN_PARAMETERS \
   | sed "s/'/\"/g" \
   | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' \
