@@ -9,7 +9,13 @@ sed -i 's|index index.html index.htm;||' "$nginx_conf"
 
 # Restart nginx to reload configuration
 systemctl restart nginx.service
+
+# Store incoming parameters as-is so we can check their value
 echo $PLUGIN_PARAMETERS > /etc/parameters.txt
+
+# Replace single quotes with double quotes for jq to function
+# write all parameters to an environment file in the format
+# <parameter>=<value>
 echo $PLUGIN_PARAMETERS \
   | sed "s/'/\"/g" \
   | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' \
