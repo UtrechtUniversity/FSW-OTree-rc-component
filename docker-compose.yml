@@ -1,10 +1,23 @@
 services:
+#  nginx:
+#    depends_on:
+#      - otree
+#    image: nginx:latest
+#    container_name: nginx
+#    networks:
+#      - default
+#    volumes:
+#      - ./nginx.conf:/etc/nginx/nginx.conf
+#    ports:
+#      - 80:80
+
   otree:
     build: https://github.com/UtrechtUniversity/FSW-OTree-container.git#main
     depends_on:
       database:
         condition: service_healthy
     restart: always
+    hostname: otree
     ports:
       - "8000:8000"
     env_file:
@@ -24,7 +37,6 @@ services:
     image: "postgres:13"
     hostname: "database"
     restart: always
-
     # By default, a Postgres database is running on the 5432 port.
     ports:
       - "5432:5432"
