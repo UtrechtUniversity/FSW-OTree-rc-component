@@ -25,5 +25,5 @@ echo $PLUGIN_PARAMETERS \
   > /etc/otree.env
 
 # Root has full access (7), root group have read access (6), not world-readable (0)
-chown root:docker
+chown root:docker /etc/otree.env
 chmod 760 /etc/otree.env
