@@ -13,6 +13,7 @@ systemctl restart nginx.service
 # Store incoming parameters as-is so we can check their value
 echo $PLUGIN_PARAMETERS > /etc/parameters.txt
 # Root has full access (7), root group have read access (6), not world-readable (0)
+chown root:docker /etc/parameters.txt
 chmod 760 /etc/parameters.txt
 
 # Replace single quotes with double quotes for jq to function
@@ -24,4 +25,5 @@ echo $PLUGIN_PARAMETERS \
   > /etc/otree.env
 
 # Root has full access (7), root group have read access (6), not world-readable (0)
+chown root:docker
 chmod 760 /etc/otree.env
