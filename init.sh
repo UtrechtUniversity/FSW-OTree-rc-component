@@ -20,3 +20,4 @@ echo $PLUGIN_PARAMETERS \
   | sed "s/'/\"/g" \
   | jq -r 'to_entries|map("\(.key)=\(.value|tostring)")|.[]' \
   > /etc/otree.env
+chmod 760 /etc/otree.env
