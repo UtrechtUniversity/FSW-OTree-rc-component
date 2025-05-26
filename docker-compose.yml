@@ -24,12 +24,12 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      # This file is expected to contain the following variables:
+      # This file is expected to contain at least the following variables:
       # GITHUB_USER
       # REPOSITORY
       # ACCESS_TOKEN
       # OTREE_ADMIN_PASSWORD
-      - otree.env
+      - /etc/otree.env
     environment:
       - OTREE_PRODUCTION=1
       - OTREE_AUTH_LEVEL=STUDY
