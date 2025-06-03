@@ -1,4 +1,7 @@
 services:
+#  2025-05-23 we use the nginx configuration on research cloud, but keep this
+#  service definition here to facilitate local testing
+#
 #  nginx:
 #    depends_on:
 #      - otree
@@ -21,7 +24,7 @@ services:
     ports:
       - "8000:8000"
     env_file:
-      # This file is expected to contain the following variables:
+      # This file is expected to contain at least the following variables:
       # GITHUB_USER
       # REPOSITORY
       # ACCESS_TOKEN
@@ -32,9 +35,19 @@ services:
       - OTREE_AUTH_LEVEL=STUDY
       - DATABASE_URL=postgresql://otree:otree@database/otree
 
+  locust:
+    image: locustio/locust
+    depends_on:
+      - otree
+    ports:
+      - "8089:8089"
+    volumes:
+      - ./:/mnt/locust
+    command: -f /mnt/locust/locustfile.py
+
   database:
     # Official Postgres image from DockerHub (we use the latest version)
-    image: "postgres:13"
+    image: "postgres:17"
     hostname: "database"
     restart: always
     # By default, a Postgres database is running on the 5432 port.
