@@ -6,7 +6,7 @@
 # a well known location for one of the containers ('otree')
 
 # Define the Nginx configuration file path
-nginx_conf="/etc/nginx/conf.d/ssl_main.conf"
+nginx_conf="/etc/nginx/conf.d/tls_main.conf"
 
 # Define two variables containing the correct reverse proxy configuration for
 # the two Docker containers
