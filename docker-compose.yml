@@ -35,15 +35,15 @@ services:
       - OTREE_AUTH_LEVEL=STUDY
       - DATABASE_URL=postgresql://otree:otree@database/otree
 
-  locust:
-    image: locustio/locust
-    depends_on:
-      - otree
-    ports:
-      - "8089:8089"
-    volumes:
-      - ./:/mnt/locust
-    command: -f /mnt/locust/locustfile.py
+#  locust:
+#    image: locustio/locust
+#    depends_on:
+#      - otree
+#    ports:
+#      - "8089:8089"
+#    volumes:
+#      - ./:/mnt/locust
+#    command: -f /mnt/locust/locustfile.py
 
   database:
     # Official Postgres image from DockerHub (we use the latest version)
