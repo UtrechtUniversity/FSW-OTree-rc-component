@@ -20,8 +20,8 @@ nginx_conf="/etc/nginx/conf.d/tls_main.conf"
 # We use an "address" consisting of a range of lines because the default SURF nginx configuration
 # define *two* endpoints for (http, https) respectively. We want to update only the latter
 # Note the sed expression in double quotes. It allows for environment variable substitution
-sed -i "15,35s|root /var/www/html;|location \/ {\n     \tproxy_pass http:\/\/localhost:8000\/;\n     \tproxy_set_header X-Forwarded-Proto $scheme;\n     \tproxy_set_header X-Forwarded-Port $server_port;\n     \tproxy_set_header X-Real-IP $remote_addr;\n     \tproxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n     \tproxy_set_header X-Forwarded-Host $server_name;\n     \tproxy_set_header Host $host;\n     \tproxy_set_header Upgrade $http_upgrade;\n     \tproxy_set_header Connection $connection_upgrade;\n}|" "$nginx_conf"
-sed -i "15,35s|index index.html index.htm;||" "$nginx_conf"
+sed -i '15,35s|root /var/www/html;|location \/ {\n     \tproxy_pass http:\/\/localhost:8000\/;\n     \tproxy_set_header X-Forwarded-Proto $scheme;\n     \tproxy_set_header X-Forwarded-Port $server_port;\n     \tproxy_set_header X-Real-IP $remote_addr;\n     \tproxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n     \tproxy_set_header X-Forwarded-Host $server_name;\n     \tproxy_set_header Host $host;\n     \tproxy_set_header Upgrade $http_upgrade;\n     \tproxy_set_header Connection $connection_upgrade;\n\t}|' "$nginx_conf"
+sed -i '15,35s|index index.html index.htm;||' "$nginx_conf"
 
 # Restart nginx to reload configuration
 systemctl restart nginx.service
