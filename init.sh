@@ -9,17 +9,19 @@
 nginx_conf="/etc/nginx/conf.d/tls_main.conf"
 
 # Define two variables containing the correct reverse proxy configuration for
-# the two Docker containers
+# two Docker containers. The second container on port 8089 is not used as yet
+
 #otree_conf="location \/ {\n     \tproxy_pass http:\/\/otree:8000\/;\n     \tproxy_set_header X-Forwarded-Proto $scheme;\n     \tproxy_set_header X-Forwarded-Port $server_port;\n     \tproxy_set_header X-Real-IP $remote_addr;\n     \tproxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n     \tproxy_set_header X-Forwarded-Host $server_name;\n     \tproxy_set_header Host $host;\n     \tproxy_set_header Upgrade $http_upgrade;\n     \tproxy_set_header Connection $connection_upgrade;\n}"
 #locust_conf="location \/locust\/ {\n     \tproxy_pass http:\/\/locust:8089\/;\n     \tproxy_set_header X-Forwarded-Proto $scheme;\n     \tproxy_set_header X-Forwarded-Port $server_port;\n     \tproxy_set_header X-Real-IP $remote_addr;\n     \tproxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n     \tproxy_set_header X-Forwarded-Host $server_name;\n     \tproxy_set_header Host $host;\n     \tproxy_set_header Upgrade $http_upgrade;\n     \tproxy_set_header Connection $connection_upgrade;\n}"
 
-# Let Nginx serve the Docker containers running on port 8000, 8089 respectively
+# Let Nginx serve the Docker container running on port 8000
 # instead of the regular static web page 'index.html'
 
-# Note the use of double quotes around the sed expression. This is crucial
-# It allows for environment variable substitution
-# sed -i 's|root /var/www/html;|location \/ {\n     \tproxy_pass http:\/\/localhost:8000\/;\n     \tproxy_set_header X-Forwarded-Proto $scheme;\n     \tproxy_set_header X-Forwarded-Port $server_port;\n     \tproxy_set_header X-Real-IP $remote_addr;\n     \tproxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n     \tproxy_set_header X-Forwarded-Host $server_name;\n     \tproxy_set_header Host $host;\n     \tproxy_set_header Upgrade $http_upgrade;\n     \tproxy_set_header Connection $connection_upgrade;\n}|' "$nginx_conf"
-# sed -i 's|index index.html index.htm;||' "$nginx_conf"
+# We use an "address" consisting of a range of lines because the default SURF nginx configuration
+# define *two* endpoints for (http, https) respectively. We want to update only the latter
+# Note the sed expression in double quotes. It allows for environment variable substitution
+sed -i "15,35s|root /var/www/html;|location \/ {\n     \tproxy_pass http:\/\/localhost:8000\/;\n     \tproxy_set_header X-Forwarded-Proto $scheme;\n     \tproxy_set_header X-Forwarded-Port $server_port;\n     \tproxy_set_header X-Real-IP $remote_addr;\n     \tproxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;\n     \tproxy_set_header X-Forwarded-Host $server_name;\n     \tproxy_set_header Host $host;\n     \tproxy_set_header Upgrade $http_upgrade;\n     \tproxy_set_header Connection $connection_upgrade;\n}|" "$nginx_conf"
+sed -i "15,35s|index index.html index.htm;||" "$nginx_conf"
 
 # Restart nginx to reload configuration
 systemctl restart nginx.service
