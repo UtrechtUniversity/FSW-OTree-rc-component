@@ -15,6 +15,9 @@ services:
 #      - 80:80
 
   otree:
+    # Docker container that wraps an OTree experiment. Its definition is read
+    # from a Github repository, possibly referring to a specific branch i.e.
+    # a specific version of the container
     build: https://github.com/UtrechtUniversity/FSW-OTree-container.git#main
     depends_on:
       database:
@@ -46,11 +49,12 @@ services:
 #    command: -f /mnt/locust/locustfile.py
 
   database:
-    # Official Postgres image from DockerHub (we use the latest version)
+    # Official Postgres image from DockerHub (we use a specific version)
     image: "postgres:17"
     hostname: "database"
     restart: always
-    # By default, a Postgres database is running on the 5432 port.
+    # By default, a Postgres database is running on port 5432. This port is not open on Research
+    # Cloud VMs but by exposing it on the host, we can connect to it, e.g. through an SSH tunnel
     ports:
       - "5432:5432"
 
@@ -59,6 +63,7 @@ services:
       - POSTGRES_PASSWORD=otree # The PostgreSQL password (useful to connect to the database)
       - POSTGRES_DB=otree # The PostgreSQL default database (automatically created at first launch)
 
+    # This check is used to ensure other containers start iff this one is ready
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
 
